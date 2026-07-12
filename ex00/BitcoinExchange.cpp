@@ -1,15 +1,20 @@
-#ifndef BITCOINEXCHANGE_HPP
-#define BITCOINEXCHANGE_HPP
+#include "BitcoinExchange.hpp"
 
-#include <iostream>
+BitcoinExchange::BitcoinExchange()
+{}
 
-class BitcoinExchange
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& cpy): _database(cpy._database)
+{}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 {
-    public :
-        BitcoinExchange();
-        BitcoinExchange(const BitcoinExchange& cpy);
-        BitcoinExchange& operator=(const BitcoinExchange& other);
-        ~BitcoinExchange();
-};
+	if (this != &other)
+	{
+		_database = other._database;
+	}
+	return (*this);
+}
 
-#endif
+BitcoinExchange::~BitcoinExchange()
+{}
+
