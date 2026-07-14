@@ -39,6 +39,19 @@ void BitcoinExchange::loadData()
 	}
 }
 
+std::string trimming(std::string& str)
+{
+	std::string res;
+	size_t fpos = str.find_first_not_of(" \t");
+	if (fpos == std::string::npos)
+		return ("");
+	size_t lpos = str.find_last_not_of(" \t");
+	if (lpos == std::string::npos)
+		return ("");
+	res = str.substr(fpos, (lpos - fpos + 1));
+	return (res);
+}
+
 void BitcoinExchange::processLine(std::string& line)
 {
 	std::string key;
