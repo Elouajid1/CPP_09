@@ -2,7 +2,10 @@
 #define BITCOINEXCHANGE_HPP
 
 #include <iostream>
+#include <exception>
 #include <map>
+#include <fstream>
+#include <sstream>
 
 class BitcoinExchange
 {
@@ -13,6 +16,11 @@ class BitcoinExchange
         BitcoinExchange(const BitcoinExchange& cpy);
         BitcoinExchange& operator=(const BitcoinExchange& other);
         ~BitcoinExchange();
+        void loadData();
+        void processFile(std::string& input);
+        void processLine(std::string& line);
+        bool isValidDate(std::string& date);
+        bool isValidValue(double value);
 };
 
 #endif
