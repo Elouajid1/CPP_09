@@ -48,7 +48,10 @@ void BitcoinExchange::processLine(std::string& line)
 		throw std::exception();
 	key = line.substr(0, n);
 	value = std::stod(line.substr(n + 1));
-
+	if (!isValidDate(key))
+		throw std::exception();
+	if (!isValidValue(value))
+		throw std::exception();
 }
 
 void BitcoinExchange::processFile(std::string& input)
@@ -103,5 +106,8 @@ bool BitcoinExchange::isValidDate(std::string& date)
 
 bool BitcoinExchange::isValidValue(double value)
 {
-	
+	if (value < 0)
+		return (false);
+	if (value > 1000)
+		return (false);
 }
