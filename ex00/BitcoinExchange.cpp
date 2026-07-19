@@ -9,9 +9,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange& cpy): _database(cpy._dat
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 {
 	if (this != &other)
-	{
 		_database = other._database;
-	}
 	return (*this);
 }
 
@@ -29,13 +27,24 @@ void BitcoinExchange::loadData()
 	while (std::getline(data, line))
 	{
 		std::string key;
-		double value;
+		std::string value;
 		size_t n = line.find(',');
 		if (n == std::string::npos)
-			throw std::exception();
+		{
+			std::cout << "Error: Invalid format" << std::endl;
+			return ;
+		}
 		key = line.substr(0, n);
-		value = std::stod(line.substr(n + 1, line.size()));
-		_database.insert({key, value});
+		value = line.substr(n + 1, line.size());
+		std::stringstream ss(value);
+		double dvalue;
+		ss >> dvalue;
+		if (!ss.eof() || ss.fail())
+		{
+			std::cout << "Error : Invalid rate" << std::endl;
+			return ;
+		}
+		_database.insert(std::make_pair(key, dvalue));
 	}
 }
 
@@ -52,24 +61,66 @@ std::string trimming(std::string& str)
 	return (res);
 }
 
-void BitcoinExchange::processLine(std::string& line)
+double BitcoinExchange::findExchangeRate(const std::string& date)
 {
-	std::string key;
-	double value;
-	size_t n = line.find('|');
-	if (n == std::string::npos)
-		throw std::exception();
-	key = line.substr(0, n);
-	value = std::stod(line.substr(n + 1));
-	if (!isValidDate(key))
-		throw std::exception();
-	if (!isValidValue(value))
-		throw std::exception();
+	std::map<std::string, double>::iterator it = _database.lower_bound(date);
+	if (it == _database.end())
+	{
+		--it;
+		return (it->second);
+	}
+	else if (it->first == date)
+		return (it->second);
+	else
+	{
+		if (it == _database.begin())
+			return (-1);
+		--it;
+		return (it->second);
+	}
 }
 
-void BitcoinExchange::processFile(std::string& input)
+void BitcoinExchange::processLine(const std::string& line)
 {
-	std::ifstream file(input);
+	std::string key;
+	std::string value;
+	size_t n = line.find('|');
+	if (n == std::string::npos)
+	{
+		std::cout << "Error: bad Input => " << line << std::endl;
+		return ;
+	}
+	key = line.substr(0, n);
+	key = trimming(key);
+	value = line.substr(n + 1);
+	value = trimming(value);
+	std::stringstream ss(value);
+	double dvalue;
+	ss >> dvalue;
+	if (ss.fail() || !ss.eof())
+	{
+		std::cout << "Error : Invalid value" << std::endl;
+		return ;
+	}
+	if (!isValidDate(key))
+		return ;
+	if (!isValidValue(dvalue))
+	{
+		return ;
+	}
+	double rate = findExchangeRate(key);
+	double result = rate * dvalue;
+	if (rate == -1)
+	{
+		std::cout << "Error: bad input" << std::endl;
+		return ;
+	}
+	std::cout << key << " => " << dvalue << " = " << result << std::endl;
+}
+
+void BitcoinExchange::processFile(const std::string& input)
+{
+	std::ifstream file(input.c_str());
 	if (!file.is_open())
 	{
 		fprintf(stderr, "can't open file\n");
@@ -79,7 +130,7 @@ void BitcoinExchange::processFile(std::string& input)
 	std::getline(file, line);
 	while (std::getline(file, line))
 	{
-
+		processLine(line);
 	}
 }
 
@@ -93,34 +144,56 @@ bool isnum(std::string str)
 	return (true);
 }
 
-bool BitcoinExchange::isValidDate(std::string& date)
+bool BitcoinExchange::isValidDate(const std::string& date)
 {
 	if (date.size() != 10)
+	{
+		std::cout << "Error: Invalid date format!" << std::endl;
 		return (false);
+	}
 	std::string year = date.substr(0, 4);
 	std::string month = date.substr(5, 2);
 	std::string day = date.substr(8, 2);
 	if (date[4] != '-' || date[7] != '-')
+	{
+		std::cout << "Error: Invalid date format!" << std::endl;
 		return (false);
+	}
 	if (!isnum(year) || !isnum(month) || !isnum(day))
+	{
+		std::cout << "Error: Invalid format!" << std::endl;
 		return (false);
+	}
 	int mo = std::atoi(month.c_str());
 	if (mo < 1 || mo > 12)
+	{
+		std::cout << "Error: Invalid month!" << std::endl;
 		return (false);
+	}
 	int monthDays[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	int ye = std::atoi(year.c_str());
 	if (ye % 400 == 0 || (ye % 4 == 0 && ye % 100 != 0))
 		monthDays[2] = 29;
 	int da = std::atoi(day.c_str());
 	if (da < 1 || da > monthDays[mo])
+	{
+		std::cout << "Error: Invalid day" << std::endl;
 		return (false);
+	}
 	return (true);
 }
 
 bool BitcoinExchange::isValidValue(double value)
 {
 	if (value < 0)
+	{
+		std::cout << "Error: not a positive number." << std::endl;
 		return (false);
+	}
 	if (value > 1000)
+	{
+		std::cout << "Error: too large a number." << std::endl;
 		return (false);
+	}
+	return (true);
 }
