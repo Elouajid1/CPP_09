@@ -61,3 +61,30 @@ void PmergeMe::parseInput(const std::string& input)
 		second.push_back(last);
 	}
 }
+
+void PmergeMe::makeVectorPairs(std::vector<std::pair<int, int>>& pairs)
+{
+	for (int i = 0; i + 1 < second.size(); i+=2)
+	{
+		pairs.push_back(std::make_pair(second[i], second[i + 1]));
+	}
+	if (second.size() % 2 != 0)
+	{
+		hasOdd = true;
+		oddElement = second[second.size() - 1];
+	}
+		
+}
+
+void PmergeMe::makeDequePairs(std::deque<std::pair<int, int>>& pairs)
+{
+	for (int i = 0; i + 1 < first.size(); i+=2)
+	{
+		pairs.push_back(std::make_pair(first[i], first[i + 1]));
+	}
+	if (first.size() % 2 != 0)
+	{
+		hasOdd = true;
+		oddElement = first[first.size() - 1];
+	}
+}
