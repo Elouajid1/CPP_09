@@ -4,6 +4,8 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <sstream>
+#include <limits>
 
 class PmergeMe
 {
@@ -16,6 +18,7 @@ class PmergeMe
 		PmergeMe(const PmergeMe& cpy);
 		PmergeMe& operator=(const PmergeMe& other);
 		~PmergeMe();
+		void parseInput(const std::string& input);
 };
 
 #endif
