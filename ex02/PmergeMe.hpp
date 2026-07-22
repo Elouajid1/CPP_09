@@ -12,6 +12,10 @@ class PmergeMe
 	private :
 		std::deque<int> first;
 		std::vector<int> second;
+		std::vector<int> mainVectorChain;
+		std::deque<int> mainDequeChain;
+		std::vector<int> pendingVectorChain;
+		std::deque<int> pendingDequeChain;
 		int oddElement;
 		bool hasOdd;
 	
@@ -23,6 +27,12 @@ class PmergeMe
 		void parseInput(const std::string& input);
 		void makeDequePairs(std::deque<std::pair<int, int>>& pairs);
 		void makeVectorPairs(std::vector<std::pair<int, int>>& pairs);
+		void sortEachPair(std::vector<std::pair<int, int>>& pairs);
+		void sortEachPair(std::deque<std::pair<int, int>>& pairs);
+		void sortPairs(std::vector<std::pair<int, int>>& pairs);
+		void sortPairs(std::deque<std::pair<int, int>>& pairs);
+		void buildChains(std::vector<std::pair<int, int>>& pairs);
+		void buildChains(std::deque<std::pair<int, int>>& pairs);
 };
 
 #endif
