@@ -234,3 +234,19 @@ void PmergeMe::buildChains(std::deque<std::pair<int, int>>& pairs)
 	}
 	mainDequeChain.push_front(pendingDequeChain[0]);
 }
+
+int findPosition(std::vector<int>& mainChain, int value)
+{
+	int left = 0;
+	int right = mainChain.size();
+
+	while (left < right)
+	{
+		int mid = (left + right) / 2;
+		if (mainChain[value] < mid)
+			left = mid + 1;
+		else
+			right = mid;
+	}
+	return (left);
+}
