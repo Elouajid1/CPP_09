@@ -266,3 +266,21 @@ int PmergeMe::findDequePosition(std::deque<int> &mainChain, int value)
 	}
 	return (left);
 }
+
+std::vector<int>& PmergeMe::generateJacob(std::vector<int>& pending)
+{
+	std::vector<int> jacob = {1, 3};
+
+	while (jacob.back() < pending.size())
+	{
+		int next = jacob.back() + 2 * jacob[jacob.size() - 2];
+		jacob.push_back(next);
+	}
+}
+
+std::vector<int>& PmergeMe::generateInsertionOrder(std::vector<int>& pending)
+{
+	std::vector<int> order;
+
+	
+}

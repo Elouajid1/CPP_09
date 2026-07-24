@@ -37,6 +37,8 @@ class PmergeMe
 		void sortVectorPairs(std::vector<std::pair<int, int>>& pairs);
 		void buildVectorChains(std::vector<std::pair<int, int>>& pairs);
 		int findVectorPosition(std::vector<int>& mainChain, int value);
+		std::vector<int>& generateJacob(std::vector<int>& pending);
+		std::vector<int>& generateInsertionOrder(std::vector<int>& pending);
 };
 
-#endif	
+#endif
