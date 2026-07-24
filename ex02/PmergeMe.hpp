@@ -25,16 +25,18 @@ class PmergeMe
 		PmergeMe& operator=(const PmergeMe& other);
 		~PmergeMe();
 		void parseInput(const std::string& input);
+
 		void makeDequePairs(std::deque<std::pair<int, int>>& pairs);
+		void sortEachDequePair(std::deque<std::pair<int, int>>& pairs);
+		void sortDequePairs(std::deque<std::pair<int, int>>& pairs);
+		void buildDequeChains(std::deque<std::pair<int, int>>& pairs);
+		int findDequePosition(std::deque<int>& mainChain, int value);
+
 		void makeVectorPairs(std::vector<std::pair<int, int>>& pairs);
-		void sortEachPair(std::vector<std::pair<int, int>>& pairs);
-		void sortEachPair(std::deque<std::pair<int, int>>& pairs);
-		void sortPairs(std::vector<std::pair<int, int>>& pairs);
-		void sortPairs(std::deque<std::pair<int, int>>& pairs);
-		void buildChains(std::vector<std::pair<int, int>>& pairs);
-		void buildChains(std::deque<std::pair<int, int>>& pairs);
-		int findPosition(std::vector<int>& mainChain, int value);
-		int findPosition(std::deque<int>& mainChain, int value);
+		void sortEachVectorPair(std::vector<std::pair<int, int>>& pairs);
+		void sortVectorPairs(std::vector<std::pair<int, int>>& pairs);
+		void buildVectorChains(std::vector<std::pair<int, int>>& pairs);
+		int findVectorPosition(std::vector<int>& mainChain, int value);
 };
 
-#endif
+#endif	

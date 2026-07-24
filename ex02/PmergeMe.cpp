@@ -89,7 +89,7 @@ void PmergeMe::makeDequePairs(std::deque<std::pair<int, int>>& pairs)
 	}
 }
 
-void PmergeMe::sortEachPair(std::vector<std::pair<int, int>>& pairs)
+void PmergeMe::sortEachVectorPair(std::vector<std::pair<int, int>>& pairs)
 {
 	for (int i = 0; i < pairs.size(); i++)
 	{
@@ -98,7 +98,7 @@ void PmergeMe::sortEachPair(std::vector<std::pair<int, int>>& pairs)
 	}
 }
 
-void PmergeMe::sortEachPair(std::deque<std::pair<int, int>>& pairs)
+void PmergeMe::sortEachDequePair(std::deque<std::pair<int, int>>& pairs)
 {
 	for (int i = 0; i < pairs.size(); i++)
 	{
@@ -173,7 +173,7 @@ std::deque<std::pair<int, int>> mergePairs(std::deque<std::pair<int, int>>& left
 	return (result);
 }
 
-void PmergeMe::sortPairs(std::vector<std::pair<int, int>>& pairs)
+void PmergeMe::sortVectorPairs(std::vector<std::pair<int, int>>& pairs)
 {
 	size_t mid;
 	std::vector<std::pair<int, int>> left;
@@ -188,13 +188,13 @@ void PmergeMe::sortPairs(std::vector<std::pair<int, int>>& pairs)
 	for (size_t i = mid; i < pairs.size(); i++)
 		right.push_back(pairs[i]);
 	
-	sortPairs(left);
-	sortPairs(right);
+	sortVectorPairs(left);
+	sortVectorPairs(right);
 
 	pairs = mergePairs(left, right);
 }
 
-void PmergeMe::sortPairs(std::deque<std::pair<int, int>>& pairs)
+void PmergeMe::sortDequePairs(std::deque<std::pair<int, int>>& pairs)
 {
 	size_t mid;
 	std::deque<std::pair<int, int>> left;
@@ -209,13 +209,13 @@ void PmergeMe::sortPairs(std::deque<std::pair<int, int>>& pairs)
 	for (size_t i = mid; i < pairs.size(); i++)
 		right.push_back(pairs[i]);
 	
-	sortPairs(left);
-	sortPairs(right);
+	sortDequePairs(left);
+	sortDequePairs(right);
 
 	pairs = mergePairs(left, right);
 }
 
-void PmergeMe::buildChains(std::vector<std::pair<int, int>>& pairs)
+void PmergeMe::buildVectorChains(std::vector<std::pair<int, int>>& pairs)
 {
 	for (int i = 0; i < pairs.size(); i++)
 	{
@@ -225,7 +225,7 @@ void PmergeMe::buildChains(std::vector<std::pair<int, int>>& pairs)
 	mainVectorChain.insert(mainVectorChain.begin(), pendingVectorChain[0]);
 }
 
-void PmergeMe::buildChains(std::deque<std::pair<int, int>>& pairs)
+void PmergeMe::buildDequeChains(std::deque<std::pair<int, int>>& pairs)
 {
 	for (int i = 0; i < pairs.size(); i++)
 	{
@@ -235,7 +235,7 @@ void PmergeMe::buildChains(std::deque<std::pair<int, int>>& pairs)
 	mainDequeChain.push_front(pendingDequeChain[0]);
 }
 
-int PmergeMe::findPosition(std::vector<int>& mainChain, int value)
+int PmergeMe::findVectorPosition(std::vector<int>& mainChain, int value)
 {
 	int left = 0;
 	int right = mainChain.size();
@@ -251,7 +251,7 @@ int PmergeMe::findPosition(std::vector<int>& mainChain, int value)
 	return (left);
 }
 
-int PmergeMe::findPosition(std::deque<int> &mainChain, int value)
+int PmergeMe::findDequePosition(std::deque<int> &mainChain, int value)
 {
 	int left = 0;
 	int right = mainChain.size();
