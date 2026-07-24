@@ -33,7 +33,8 @@ class PmergeMe
 		void sortPairs(std::deque<std::pair<int, int>>& pairs);
 		void buildChains(std::vector<std::pair<int, int>>& pairs);
 		void buildChains(std::deque<std::pair<int, int>>& pairs);
-		int findPosition(std::vector<int>& mainChain);
+		int findPosition(std::vector<int>& mainChain, int value);
+		int findPosition(std::deque<int>& mainChain, int value);
 };
 
 #endif
