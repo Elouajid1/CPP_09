@@ -1,28 +1,17 @@
 #include "PmergeMe.hpp"
+#include <iomanip>
 
 template <typename Container>
-void printContainer(const std::string &label, const Container &c)
+void printContainer(const Container &c)
 {
-    std::cout << label << ": ";
     for (typename Container::const_iterator it = c.begin(); it != c.end(); ++it)
         std::cout << *it << " ";
     std::cout << std::endl;
 }
 
-void printPairs(const std::string &label, const std::vector<std::pair<int, int> > &pairs)
+double getMicroSeconds(const struct timeval& start, const struct timeval& end)
 {
-    std::cout << label << ": ";
-    for (size_t i = 0; i < pairs.size(); i++)
-        std::cout << "(" << pairs[i].first << "," << pairs[i].second << ") ";
-    std::cout << std::endl;
-}
-
-void printPairs(const std::string &label, const std::deque<std::pair<int, int> > &pairs)
-{
-    std::cout << label << ": ";
-    for (size_t i = 0; i < pairs.size(); i++)
-        std::cout << "(" << pairs[i].first << "," << pairs[i].second << ") ";
-    std::cout << std::endl;
+    return ((end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec));
 }
 
 int main(int argc, char **argv)
@@ -41,47 +30,30 @@ int main(int argc, char **argv)
     }
 
     PmergeMe pm;
-    pm.parseInput(input);
+    if (!pm.parseInput(input))
+    {
+        std::cerr << "Error" << std::endl;
+        return (1);
+    }
+    
+    std::cout << "Before : ";
+    printContainer(pm.getVecInput());
 
-    std::cout << "=== INPUT ===" << std::endl;
-    printContainer("Vector input", pm.getVecInput());
-    printContainer("Deque input ", pm.getDeqInput());
+    struct timeval start_vec, end_vec, start_deq, end_deq;
+    gettimeofday(&start_vec, NULL);
+    pm.sortVector();
+    gettimeofday(&end_vec, NULL);
 
-    std::cout << "\n=== VECTOR PATH ===" << std::endl;
-    std::vector<std::pair<int, int> > vecPairs;
-    pm.makeVectorPairs(vecPairs);
-    printPairs("Pairs (raw)", vecPairs);
+    gettimeofday(&start_deq, NULL);
+    pm.sortDeque();
+    gettimeofday(&end_deq, NULL);
 
-    pm.sortEachVectorPair(vecPairs);
-    printPairs("Pairs (each swapped so first<second)", vecPairs);
+    std::cout << "After : ";
+    printContainer(pm.getMainVectorChain());
 
-    pm.sortVectorPairs(vecPairs);
-    printPairs("Pairs (recursively sorted by .second)", vecPairs);
-
-    pm.buildVectorChains(vecPairs);
-    printContainer("Main chain (before insert)", pm.getMainVectorChain());
-    printContainer("Pending chain", pm.getPendingVectorChain());
-
-    pm.insertVectorPending();
-    printContainer("Main chain (AFTER insert = final sorted)", pm.getMainVectorChain());
-
-    std::cout << "\n=== DEQUE PATH ===" << std::endl;
-    std::deque<std::pair<int, int> > deqPairs;
-    pm.makeDequePairs(deqPairs);
-    printPairs("Pairs (raw)", deqPairs);
-
-    pm.sortEachDequePair(deqPairs);
-    printPairs("Pairs (each swapped so first<second)", deqPairs);
-
-    pm.sortDequePairs(deqPairs);
-    printPairs("Pairs (recursively sorted by .second)", deqPairs);
-
-    pm.buildDequeChains(deqPairs);
-    printContainer("Main chain (before insert)", pm.getMainDequeChain());
-    printContainer("Pending chain", pm.getPendingDequeChain());
-
-    pm.insertDequePending();
-    printContainer("Main chain (AFTER insert = final sorted)", pm.getMainDequeChain());
-
-    return (0);
+    double vect_duration = getMicroSeconds(start_vec, end_vec);
+    double Deq_duration = getMicroSeconds(start_deq, end_deq);
+    std::cout << std::fixed << std::setprecision(5);
+    std::cout << "Time to process a range of " << pm.getVecInput().size() << " elements with std::vector : " << vect_duration << " us" << std::endl;
+    std::cout << "Time to process a range of " << pm.getDeqInput().size() << " elements with std::deque : " << Deq_duration << " us" << std::endl;
 }

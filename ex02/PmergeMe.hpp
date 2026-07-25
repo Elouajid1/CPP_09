@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <limits>
+#include <sys/time.h>
 
 class PmergeMe
 {
@@ -18,37 +19,41 @@ class PmergeMe
 		std::deque<int> pendingDequeChain;
 		int oddElement;
 		bool hasOdd;
-	
-	public :
-		PmergeMe();
-		PmergeMe(const PmergeMe& cpy);
-		PmergeMe& operator=(const PmergeMe& other);
-		~PmergeMe();
-		void parseInput(const std::string& input);
 
 		void makeDequePairs(std::deque<std::pair<int, int> >& pairs);
 		void sortEachDequePair(std::deque<std::pair<int, int> >& pairs);
 		void sortDequePairs(std::deque<std::pair<int, int> >& pairs);
 		void buildDequeChains(std::deque<std::pair<int, int> >& pairs);
 		int findDequePosition(int value);
+		std::deque<int> generateDequeJacob();
+		std::deque<int> generateDequeInsertionOrder();
+		void insertDequePending();
 
 		void makeVectorPairs(std::vector<std::pair<int, int> >& pairs);
 		void sortEachVectorPair(std::vector<std::pair<int, int> >& pairs);
 		void sortVectorPairs(std::vector<std::pair<int, int> >& pairs);
 		void buildVectorChains(std::vector<std::pair<int, int> >& pairs);
 		int findVectorPosition(int value);
-		std::vector<int> generateJacob();
-		std::vector<int> generateInsertionOrder();
+		std::vector<int> generateVectorJacob();
+		std::vector<int> generateVectorInsertionOrder();
 		void insertVectorPending();
 
-		// PmergeMe.hpp — add to public section
+	public :
+		PmergeMe();
+		PmergeMe(const PmergeMe& cpy);
+		PmergeMe& operator=(const PmergeMe& other);
+		~PmergeMe();
+		bool parseInput(const std::string& input);
+
 		const std::vector<int> &getVecInput() const;
 		const std::deque<int> &getDeqInput() const;
 		const std::vector<int> &getMainVectorChain() const;
 		const std::vector<int> &getPendingVectorChain() const;
 		const std::deque<int> &getMainDequeChain() const;
 		const std::deque<int> &getPendingDequeChain() const;
-		void insertDequePending();
+
+		void sortVector();
+		void sortDeque();
 };
 
 #endif
